@@ -1,0 +1,10 @@
+.neon_green {
+    background: black;
+    color: aqua;
+}
+
+.card {
+    border: 1px solid aqua;
+    border-radius: 10px;
+    padding: 10px 50px;
+}
