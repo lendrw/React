@@ -27,6 +27,7 @@ function App() {
   const [pickedWord, setPickedWord] = useState("");
   const [pickedCategory, setPickedCategory] = useState("");
   const [letters, setLetters] = useState([]);
+  const [trueLetters, setTrueLetters] = useState([]);
 
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
@@ -37,8 +38,6 @@ function App() {
     // pick a random category
     const categories = Object.keys(words);
     const category = categories[Math.floor(Math.random() * Object.keys(categories).length)]
-
-    console.log(category);
 
     // pick a random word
     const word = 
@@ -58,41 +57,46 @@ function App() {
     // create an array of letters
     let wordLetters = word.split("");
 
-    wordLetters = wordLetters.map((l) => l.toLowerCase());
+    wordLetters = wordLetters.map((l) => l.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
 
-    console.log(word, category);
+    let trueLetters = word.split("");
+
+    trueLetters = trueLetters.map((l) => l.toLowerCase())
+
     console.log(wordLetters);
+    console.log(trueLetters);
 
     // fill states
     setPickedWord(word);
     setPickedCategory(category);
     setLetters(wordLetters);
+    setTrueLetters(trueLetters);
 
     setGameStage(stages[1].name);
   }, [pickWordAndCategory]);
 
   //process the letter input
-  const verifyLetter = (letter) => {
-    const normalizedLetter = letter.toLowerCase();
+  const verifyLetter = (l) => {
+    const letter = l;
 
     // check if the letter has already been utilized
     if(
-      guessedLetters.includes(normalizedLetter) || 
-      wrongLetters.includes(normalizedLetter)
+      guessedLetters.includes(letter) || 
+      wrongLetters.includes(letter)
       ) {
         return;
       }
 
       // push guessed letter or remove a guess
-      if (letters.includes(normalizedLetter)) {
+      if (letters.includes(letter)) {
         setGuessedLetters((actualGuessedLetters) => [
           ...actualGuessedLetters, 
-          normalizedLetter,
+          letter,
         ]);
       } else {
         setWrongLetters((actualWrongLetters) => [
           ...actualWrongLetters, 
-          normalizedLetter,
+          letter,
         ]);
 
         setGuesses((actualGuesses) => actualGuesses - 1);
@@ -122,9 +126,11 @@ function App() {
     if(guessedLetters.length === uniqueLetters.length) {
       // add score
       setScore((actualScore) => (actualScore += 100));
+
+      // restart game with new word
+      startGame();
     };
 
-    console.log(uniqueLetters);
   }, [guessedLetters, letters, startGame]);
   
   //restarts the game
