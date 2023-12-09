@@ -150,6 +150,7 @@ function App() {
         pickedWord={pickedWord} 
         pickedCategory={pickedCategory} 
         letters={letters}
+        trueLetters={trueLetters}
         guessedLetters={guessedLetters}
         wrongLetters={wrongLetters}
         guesses={guesses}

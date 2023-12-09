@@ -6,12 +6,14 @@ const Game = ({
   pickedWord,
   pickedCategory,
   letters,
+  trueLetters,
   guessedLetters,
   wrongLetters,
   guesses,
   score,
 }) => {
   const [letter, setLetter] = useState("");
+  const [trueLetter, setTrueLetter] = useState("");
   const letterInputRef = useRef(null);
 
   const handleSubmit = (e) => {
@@ -35,16 +37,17 @@ const Game = ({
       </h3>
       <p>Você ainda tem {guesses} tentativa(s).</p>
       <div className="wordContainer">
-        {letters.map((letter, i) => 
-        guessedLetters.includes(letter) ? (
-          <span key={i} className="letter">
-            {letter}
-          </span>
-        ) : (
-          <span key={i} className="blankSquare"></span>
-        )
+      {trueLetters.map((trueLetter, i) =>
+        guessedLetters.includes(letters[i]) ? (
+        <span key={i} className="letter">
+        {trueLetter}
+        </span>
+          ) : (
+        <span key={i} className="blankSquare"></span>
+          )
         )}
       </div>
+
       <div className="letterContainer">
         <p>Tenete adivinhar uma letra da palavra:</p>
         <form onSubmit={handleSubmit}>
