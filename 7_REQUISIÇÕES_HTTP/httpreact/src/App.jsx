@@ -11,6 +11,13 @@ function App() {
   const [price, setPrice] = useState("");
 
   // 1 - resgatando dados
+  /*
+    Resgatando dados com react:
+    - Para trazer os dados, vamos ter que utilizar vários recursos;
+    - Primeiramente ter um local para salvá-los (UseState);
+    - Renderizar a chamada à API apenas uma vez (UseEffect);
+    - Um meio de fazer a requisição assíncrona (Fetch API);
+  */
   useEffect(() => {
 
     async function fetchData() {
@@ -25,6 +32,13 @@ function App() {
   }, []);
 
   // 2 - adição de produtos
+  /*
+    Adicionanado dados:
+    - Para adicionar um item, é necessário resgatar os dados do form com o useState;
+    - Reunir eles em uma função após oo submit e enviar um request de POST para a API;
+    - O processo é bem parecido com o de resgate mas agora os dados estão sendo enviados;
+    - 
+  */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -36,9 +50,10 @@ function App() {
     const res = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(product)
+      body: JSON.stringify(product),
+      //transforma em String para ser adequado ao back-end
     });
   };
 
