@@ -2,10 +2,16 @@ import './App.css';
 
 import { useState, useEffect } from "react";
 
+// 4 - custom hook
+import { useFetch } from "./hooks/useFetch";
+
 const url = "http://localhost:3000/products";
 
 function App() {
   const [products, setProducts] = useState([]);
+
+  // 4 - custom
+  const { data: items, httpConfig, loading } = useFetch(url);
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -21,6 +27,7 @@ function App() {
   useEffect(() => {
 
     async function fetchData() {
+
       const res = await fetch(url);
 
       const data = await res.json();
@@ -29,7 +36,7 @@ function App() {
     }
 
     fetchData();
-  }, []);
+  }, []);   
 
   // 2 - adição de produtos
   /*
@@ -47,6 +54,7 @@ function App() {
       price,
     };
 
+    /*
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -55,18 +63,36 @@ function App() {
       body: JSON.stringify(product),
       //transforma em String para ser adequado ao back-end
     });
+
+    // 3 - carregamneto dinâmico
+
+    const addedProduct = await res.json();
+
+    setProducts((prevProducts) => [...prevProducts, addedProduct]);
+    */
+
+    // 5 - refatorando post
+    httpConfig(product, "POST");
+
+    //reset dos inputs
+    setName("");
+    setPrice("");
   };
 
   return (
     <div className="App">
       <h1>Lista de produtos</h1>
-      <ul>
-        {products.map((product) => (
+      {/* 6 - loading */}
+      {loading && <p>Caregando dados...</p>}
+      {!loading && (
+        <ul>
+        {items && items.map((product) => (
           <li key={product.id}>
             {product.name} - R$: {product.price}
           </li>
         ))}
       </ul>
+      )}
       <div className="add-product">
         <form onSubmit={handleSubmit}>
           <label>
@@ -87,7 +113,9 @@ function App() {
               onChange={(e) => setPrice(e.target.value)}
             />
           </label>
-          <input type="submit" value="Criar"/>
+          {/* 7 - state de loading no post */}
+          {loading && <input type="submit" disabled value="Aguarde"/>}
+          {!loading && <input type="submit" value="Criar"/>}
         </form>
       </div>
     </div>
