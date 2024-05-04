@@ -14,6 +14,11 @@
       "name": "camiseta",
       "price": "3",
       "id": 3
+    },
+    {
+      "name": "v",
+      "price": "1",
+      "id": 4
     }
   ]
 }
