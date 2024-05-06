@@ -1,9 +1,32 @@
-import React from 'react'
+import { Link, useParams } from "react-router-dom";
+import { useFetch } from "../hooks/useFetch";
 
 const Product = () => {
-  return (
-    <div>Product</div>
-  )
-}
+    // 4 - rota dinâmica
+    const { id } = useParams();
 
-export default Product
+    // 5 -carregamento dado individual
+    const url = "http://localhost:3000/products/" + id
+
+    const {data: product, loading, error} = useFetch(url)
+
+    console.log(product)
+
+  return (
+    <>
+        <p>ID do produto: {id}</p>
+        {error && <p>Ocorreu um erro...</p>}
+        {loading && <p>Carregando...</p>}
+        {product && (
+            <div>
+                <h1>{product.name}</h1>
+                <p>R${product.price}</p>
+                {/* nested routes */}
+                <Link to={`/products/${product.id}/info`}>Mais informações</Link>
+            </div>
+        )}
+    </>
+  );
+};
+
+export default Product;

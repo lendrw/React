@@ -2,7 +2,7 @@
     "products": [
       {
         "id": 1,
-        "name": "Camisa",
+        "name": "camisa",
         "price": 50.5
       },
       {
